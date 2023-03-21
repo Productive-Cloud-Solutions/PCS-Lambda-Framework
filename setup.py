@@ -13,6 +13,6 @@ setuptools.setup(
     project_urls = {
     },
     license="",
-    packages=['util', 'controllers', 'frameworks', 'test', 'models'],
+    packages=['pcs'],
     install_requires=[],
 )
