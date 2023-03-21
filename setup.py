@@ -1,7 +1,5 @@
 import setuptools
 
-
-
 setuptools.setup(
     name='pcs',
     version='0.0.1',
@@ -13,5 +11,6 @@ setuptools.setup(
     project_urls = {
     },
     license="",
+    packages=setuptools.find_packages(),
     install_requires=[],
 )
