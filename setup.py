@@ -3,7 +3,7 @@ import setuptools
 
 
 setuptools.setup(
-    name='pcs-lambda-framework',
+    name='pcs',
     version='0.0.1',
     author='PCS',
     author_email='https://productivecloudsolutions.com',
@@ -13,6 +13,5 @@ setuptools.setup(
     project_urls = {
     },
     license="",
-    packages=['pcs/util', 'pcs/controllers', 'pcs/frameworks', 'pcs/test', 'pcs/models'],
     install_requires=[],
 )
