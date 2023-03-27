@@ -6,8 +6,9 @@ build-backend = "setuptools.build_meta"
 name = "pcs"
 version = "0.0.2"
 description = "PCS instalation package."
+license = {text = "Proprietary"}
 authors = [
-    "PCS <https://productivecloudsolutions.com>",
+    {name="PCS">}
 ]
 
 [project.readme]
