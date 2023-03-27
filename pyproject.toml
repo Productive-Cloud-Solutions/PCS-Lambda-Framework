@@ -12,7 +12,7 @@ authors = [
 ]
 maintainers = [
 ]
-readme = ["README.md"]
+readme = ["README.me"]
 repository = "https://github.com/Productive-Cloud-Solutions/PCS-Lambda-Framework"
 packages = [
     { include = "pcs" },
