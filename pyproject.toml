@@ -17,8 +17,8 @@ content-type = "text/markdown"
 
 [tool.setuptools]
 package-dir = {"" = "pcs"}
-include-package-data = false
+include-package-data = true
 
 [tool.setuptools.packages.find]
-where = ["src"]
-namespaces = false
+where = ["pcs"]
+namespaces = true
