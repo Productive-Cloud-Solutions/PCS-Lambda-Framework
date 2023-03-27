@@ -17,3 +17,6 @@ content-type = "text/markdown"
 
 [tool.setuptools.packages.find]
 where = ["pcs"]
+
+[tool.setuptools]
+include-package-data = true
