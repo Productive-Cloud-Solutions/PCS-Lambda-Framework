@@ -15,10 +15,8 @@ authors = [
 file = "README.md"
 content-type = "text/markdown"
 
-[tool.setuptools]
-package-dir = {"" = "pcs"}
-include-package-data = true
+[tool.setuptools.packages]
+find = {} 
 
 [tool.setuptools.packages.find]
 where = ["pcs"]
-namespaces = true
