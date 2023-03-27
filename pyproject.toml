@@ -8,7 +8,7 @@ version = "0.0.2"
 description = "PCS instalation package."
 license = {text = "Proprietary"}
 authors = [
-    {name="PCS">}
+    {name="PCS"}
 ]
 
 [project.readme]
