@@ -1,0 +1,113 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+    PCS Base Import
+
+    Sample SAM Template for PCS Base Import
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 180
+
+Conditions:
+  CreateProdResource: !Equals 
+    - !Ref Environment
+    - production
+  CreateDevResource: !Equals 
+    - !Ref Environment
+    - dev
+  CreateStagingResource: !Equals 
+    - !Ref Environment
+    - staging
+
+  NotProductionResource: 
+    !Not [!Equals [!Ref Environment, production]]
+
+
+Parameters:
+    
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues:
+      - dev
+      - staging
+      - production
+
+  GitBranch:
+    Type: String
+    Default: dev
+    AllowedValues:
+      - dev
+      - staging
+      - master
+      - main
+
+
+  MongoUser:
+    Type: String
+    Default: root
+
+
+Conditions:
+  CreateProdResource: !Equals 
+    - !Ref Environment
+    - production
+  CreateDevResource: !Equals 
+    - !Ref Environment
+    - dev
+  CreateStagingResource: !Equals 
+    - !Ref Environment
+    - staging
+
+Resources:
+  Requirements:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: ./Python_Requirements_Layer/
+  CommonLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: ./Lambda Common Layer/
+
+  # https://aws.amazon.com/premiumsupport/knowledge-center/internet-access-lambda-function/
+  MainFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: ./
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Layers:
+        - !Ref Requirements
+        # - !Ref CommonLayer
+      Environment:
+        Variables:
+          DEBUG: false
+          MONGO_DB_HOST: localhost
+          ENVIRONMENT: !Ref Environment
+      Policies:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+        - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/AmazonCognitoPowerUser
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/SecretsManagerReadWrite
+  
+  
+Outputs:
+
+  Temp:
+      Description: "Place Holder"
+      Value: "Working"
+    # HelloWorldApi:
+    #   Description: "API Gateway endpoint URL for Prod stage for Hello World function"
+    #   Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
+
+    # HelloWorldFunction:
+    #   Description: "Hello World Lambda Function ARN"
+    #   Value: !GetAtt HelloWorldFunction.Arn
+
+    # HelloWorldFunctionIamRole:
+    #   Description: "Implicit IAM Role created for Hello World function"
+    #   Value: !GetAtt HelloWorldFunctionRole.Arn

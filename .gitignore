@@ -1,0 +1,3 @@
+ptvsd*
+Python_Requirements_Layer/python/*
+!Python_Requirements_Layer/python/requirements.txt

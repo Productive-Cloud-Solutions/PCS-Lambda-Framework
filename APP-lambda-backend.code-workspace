@@ -1,0 +1,126 @@
+{
+	"folders": [
+		// {
+		// 	"name": "App Shared Code",
+		// 	"path": "layers/Lambda Common Layer/python"
+		// },
+		{
+			"name": "Server",
+			"path": "."
+		}
+	],
+	"settings": {
+		"python.autoComplete.extraPaths": [
+			"./layers/Lambda Common Layer/python",
+			"./layers/Python_Requirements_Layer/python",
+		],
+		"python.analysis.extraPaths": [
+			"./layers/Lambda Common Layer/python",
+			"./layers/Python_Requirements_Layer/python",
+		]
+	},
+	"tasks": {
+		"version": "2.0.0",
+		"inputs": [
+			{
+				"id": "functionName",
+				"type": "pickString",
+				"description": "Which Function ot connect to?",
+				"options": [
+					"MainFunction",
+					"SystemFunction",
+					"ApiFunction"
+				],
+				"default": "ApiFunction"
+			}
+		],
+		"tasks": [
+			{
+				"label": "debugMain",
+				"type": "shell",
+				"windows": {
+					"command": "& cd '${workspaceFolder:Server}' ; .\\local-helper-dev-scripts\\runFunction-debug.bat MainFunction .\\events\\test.json"
+				},
+				"command": "./local-helper-dev-scripts/runFunction-debug.sh MainFunction ./events/test.json"
+			},
+			{
+				"label": "debugFunction",
+				"type": "shell",
+				"windows": {
+					"command": "& cd '${workspaceFolder:Server}' ; .\\local-helper-dev-scripts\\runFunction-debug.bat ${input:functionName} .\\events\\test.json"
+				},
+				"command": "cd \"${workspaceFolder:Server}\" && ./local-helper-dev-scripts/runFunction-debug.sh ${input:functionName} ./events/test.json"
+			}
+		]
+	},
+	"launch": {
+		"inputs": [
+			{
+				"id": "functionPath",
+				"type": "pickString",
+				"description": "Which Function ot connect to?",
+				"options": [
+					"main_function",
+					"system_function",
+					"api_function"
+				],
+				"default": "api_function"
+			}
+		],
+		"configurations": [
+			{
+				"name": "debugFunction",
+				"type": "python",
+				"request": "attach",
+				"port": 5890,
+				"host": "localhost",
+				"pathMappings": [
+					{
+						"localRoot": "${workspaceFolder:Server}/${input:functionPath}",
+						"remoteRoot": "/var/task"
+					},
+					{
+						"localRoot": "${workspaceFolder:Server}/layers/Lambda Common Layer",
+						"remoteRoot": "/opt"
+					}
+				],
+				"preLaunchTask": "debugFunction",
+			},
+			{
+				"name": "debugMain",
+				"type": "python",
+				"request": "attach",
+				"port": 5890,
+				"host": "localhost",
+				"pathMappings": [
+					{
+						"localRoot": "${workspaceFolder:Server}/main_function",
+						"remoteRoot": "/var/task"
+					},
+					{
+						"localRoot": "${workspaceFolder:Server}/layers/Lambda Common Layer",
+						"remoteRoot": "/opt"
+					}
+				],
+				"preLaunchTask": "debugMain",
+			},
+			{
+				"name": "debugConnect",
+				"type": "python",
+				"request": "attach",
+				"port": 5890,
+				"host": "localhost",
+				"pathMappings": [
+					{
+						"localRoot": "${workspaceFolder:Server}/${input:functionPath}",
+						"remoteRoot": "/var/task"
+					},
+					{
+						"localRoot": "${workspaceFolder:Server}/layers/Lambda Common Layer",
+						"remoteRoot": "/opt"
+					}
+				]
+			}
+		]
+	}
+}

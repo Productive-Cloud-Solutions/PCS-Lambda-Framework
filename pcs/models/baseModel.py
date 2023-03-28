@@ -5,7 +5,7 @@ import copy
 from bson.objectid import ObjectId
 from pymongo import MongoClient, ReturnDocument
 from pymongo.errors import CollectionInvalid
-from util import secrets
+from pcs.util import secrets
 import urllib.parse
 import json
 import time

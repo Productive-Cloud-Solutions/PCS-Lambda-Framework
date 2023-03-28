@@ -1,0 +1,4 @@
+{
+    "identity":{"claims": {"sub": "f645a7a7-4ca1-4251-a1e4-3234e8529a39", "event_id": "009b138e-84d3-433d-9331-80c1ca7334c7", "token_use": "access", "scope": "aws.cognito.signin.user.admin", "auth_time": 1604155668, "iss": "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_qe8XZCPdv", "exp": 1604166731, "iat": 1604163131, "jti": "704c0e68-8d58-4f6f-87dd-55926cf6c1c9", "client_id": "34bbonopelv041jogkr6kkng51", "username": "emanuelp7"}, "defaultAuthStrategy": "ALLOW", "issuer": "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_qe8XZCPdv", "sourceIp": ["73.106.79.13"], "sub": "f645a7a7-4ca1-4251-a1e4-3234e8529a39", "username": "emanuelp7"},
+    "action":"placeholder"
+}

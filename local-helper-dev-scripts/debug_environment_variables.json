@@ -1,0 +1,11 @@
+{
+    "MainFunction": {
+      "DEBUG": true
+    },
+    "SystemFunction": {
+      "DEBUG": true
+    },
+    "ApiFunction": {
+      "DEBUG": true
+    }
+}

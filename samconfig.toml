@@ -1,0 +1,12 @@
+# https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-config.html
+version=0.1
+
+[default.local_invoke.parameters]
+profile = "pcs-devs"
+# Change the line ABOVE to your profile name created using 
+# aws configure --profile [project specific name]
+
+
+[dev.local.start-api]
+profile = "pcs-devs"
+

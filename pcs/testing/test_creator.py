@@ -1,8 +1,6 @@
 import uuid
 import time
 import json
-from models.user import User
-user_model = User()
 
 
 class TestUser():
@@ -111,30 +109,30 @@ def createEvent(action:str, payload:dict=None, user:TestUser = None, userId:str=
     return event
 
 
-def createUser(user:TestUser):
-    # payload={
-    # }
-    userObj = {
-        'id': user.id,
-        'firstName': user.firstName,
-        'lastName': user.lastName,
-        'about': f'This is aboout {user.name} with {user.email}. Address: {user.address}.',
-        'email': user.email,
-    }
-    # result = LambdaTester().createEvent("updateUser",payload=payload, user=user)
-    result = user_model.create(userObj)
-    result['type'] = user.type
-    if user.gender:
-        result['gender'] = user.gender
-    if user.phone:
-        result['phone'] = user.phone
-    if user.address:
-        result['address'] = user.address
-    if user.name:
-        result['name'] = user.name
+# def createUser(user:TestUser):
+#     # payload={
+#     # }
+#     userObj = {
+#         'id': user.id,
+#         'firstName': user.firstName,
+#         'lastName': user.lastName,
+#         'about': f'This is aboout {user.name} with {user.email}. Address: {user.address}.',
+#         'email': user.email,
+#     }
+#     # result = LambdaTester().createEvent("updateUser",payload=payload, user=user)
+#     result = user_model.create(userObj)
+#     result['type'] = user.type
+#     if user.gender:
+#         result['gender'] = user.gender
+#     if user.phone:
+#         result['phone'] = user.phone
+#     if user.address:
+#         result['address'] = user.address
+#     if user.name:
+#         result['name'] = user.name
     
-    result = user_model.replace(user.id, result)
-    return user
+#     result = user_model.replace(user.id, result)
+#     return user
 
 def loadSample(file):
     return json.load(open("test/test_data/"+file))
