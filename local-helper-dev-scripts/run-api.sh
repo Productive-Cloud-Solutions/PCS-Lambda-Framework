@@ -1,0 +1,1 @@
+sam local start-api -t ./template.yaml --docker-network db-local-network --warm-containers LAZY
