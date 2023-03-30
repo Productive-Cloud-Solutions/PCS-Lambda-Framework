@@ -9,10 +9,10 @@ import time
 import random
 from datetime import datetime
 from unittest.mock import patch, MagicMock, Mock
-from framework.baseController import BaseController
-from framework.appFrameworks import GQLServerlessApp
+from pcs.controllers.baseController import BaseController
+from pcs.frameworks.appFrameworks import GQLServerlessApp
 
-from util.test_creator import TestUser, createEvent, LambdaTester, loadSample
+from pcs.testing.test_creator import TestUser, createEvent, LambdaTester, loadSample
 
 tester = LambdaTester(app.lambda_handler)
 

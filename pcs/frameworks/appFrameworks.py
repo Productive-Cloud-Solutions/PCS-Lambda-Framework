@@ -2,7 +2,7 @@ import os
 import json
 import types
 import inspect
-from framework import baseController
+from pcs.controllers import baseController
 import systemTest
 
 #TODO: Make backwards compatible with old controllers
