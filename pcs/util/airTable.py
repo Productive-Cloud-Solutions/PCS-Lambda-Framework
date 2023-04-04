@@ -1,8 +1,8 @@
-from pyairtable import Table as airTable
-from pyairtable import Base as airBase
-from pyairtable.formulas import *
+from Python_Requirements_Layer.python.pyairtable import Table as airTable
+from Python_Requirements_Layer.python.pyairtable import Base as airBase
+from Python_Requirements_Layer.python.pyairtable.formulas import *
 import time
-from models.airTableCache import AirTableCache
+from pcs.models.airTableCache import AirTableCache
 import hashlib 
 
 airTableCache_model = AirTableCache()

@@ -1,4 +1,4 @@
-from models.user import User
+from pcs.models.user import User
 # from models.baseModel import PermissionsBaseModel
 from functools import wraps
 

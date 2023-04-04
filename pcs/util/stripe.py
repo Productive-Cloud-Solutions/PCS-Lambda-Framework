@@ -1,7 +1,7 @@
 import stripe
 import json
 import os
-from . import secrets
+from pcs.util import secrets
 
 API_KEY = json.loads(secrets.get_secret('dev/Stripe/Api'))
 

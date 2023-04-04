@@ -3,7 +3,6 @@ import json
 import types
 import inspect
 from pcs.controllers import baseController
-import systemTest
 
 #TODO: Make backwards compatible with old controllers
 
@@ -16,7 +15,7 @@ class GQLServerlessApp():
         self.gqlMap = {}
 
 
-    def linkGraphQL(self, controllerClass, parentType=None, action=None, func=None):
+    def linkGraphQL(self, controllerClass, parentType=None, action=None, func=None, kwargs=None, args=None):
         if parentType not in self.gqlMap:
             self.gqlMap[parentType] = []
         
@@ -28,6 +27,8 @@ class GQLServerlessApp():
             # "instance":None,
             "action":None,
             "func":None,
+            "kwargs": kwargs,
+            "args": args,
             }
         
         #If action or func are specified
@@ -57,6 +58,8 @@ class GQLServerlessApp():
         #for each loop for this
         for control in controllers:
             cls = control.get("class")
+            kwargs = control.get("kwargs")
+            args = control.get("args")
             if not cls:
                 continue
                 
@@ -73,4 +76,10 @@ class GQLServerlessApp():
                 cls = cls(userId=self.userId, username=self.username, payload=self.payload, source=self.source)
                 fn = getattr(cls, func_name, None)
 
+            if kwargs and args:
+                return fn(*args, **kwargs)
+            elif kwargs:
+                return fn(**kwargs)
+            elif args:
+                return fn(*args)
             return fn()

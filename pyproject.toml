@@ -10,7 +10,13 @@ license = {text = "Proprietary"}
 authors = [
     {name="PCS"}
 ]
-
+dependencies = [
+    "stripe",
+    "Jinja2",
+    "fpdf2",
+    "pyairtable",
+    
+]
 [project.readme]
 file = "README.md"
 content-type = "text/markdown"
