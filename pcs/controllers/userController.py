@@ -2,88 +2,91 @@ import os
 import json
 import boto3
 # from models import user_old as user_model
-from models.user import User
-from util.stripe import stripe
+from pcs.models.user import User
+from pcs.util.stripe import stripe
 from datetime import datetime
-from decorators.checkUser import check_user
-from framework.baseController import BaseController
+from pcs.decorators.checkUser import check_user
+from pcs.controllers.baseController import BaseController
 
 client = boto3.client('cognito-idp')
 
 user_model = User()
 
-# class UserController(BaseController):
-#     def __init__(self, userId=None, username=None, payload=None, source=None):
-#         super.__init__(self, userId, username, payload, source)
+class UserController(BaseController):
+    def getUser(self):
+        if not self.userId:
+            raise Exception("User was not found")
+        if not self.payload.get("username"):
+            raise Exception("Username was not found")
+        
+        user= user_model.get(self.userId) 
+        if not user:
+            raise Exception("User was not found!!!")
+        
+        query= {
+            'userId': self.userId,
+            # 'username': self.payload['username'],
+        }
+        
+        user= user_model.find(query) 
+        if not user:
+            raise Exception("Failed to find user!!!")
+        return user
 
-#     def userInit(self):
-#         user = getUser(self.userId, self.username)
-#         return user
 
-def getUser(userId, username=False):
-    user = user_model.get(userId)
-    # unknown exception
-    if not user:
-        if not username:
-            raise Exception("Can't Find User!!!")
-        return createUser(userId, username)
+    def createUser(self):
+        if not self.userId:
+            raise Exception("User was not found")
+        if not self.payload.get("username"):
+            raise Exception("Username cannot be empty!!!") 
+        if not self.payload.get("email"):
+            raise Exception("Email cannot be empty!!!")    
+        # if not self.payload.get("UserCreateDate"):
+        #     raise Exception("UserCreateDate cannot be empty!!!")
+        self.payload['userId']=self.userId
+        
+        user = user_model.create(self.payload)
+        if not user:
+            raise Exception("Failed to create user!!!")
+        
+        return user
 
-    return user
 
-
-def createUser(userId, username):
-    poolId = os.environ.get('USER_POOL')
-    user = {
-        'id':userId
-    }
-    # if local dev enviroment 
-    if os.environ.get('AWS_SAM_LOCAL'):
-        user['created'] = datetime.today().replace(microsecond=0)
-        user['modified'] = datetime.today().replace(microsecond=0)
-        user['username'] = username if username else 'username_'+user['id']
-        if 'email' not in user:
-            user['email'] = user['username']+"@gmail.com"
-    else:
-        # get cognito data
-        result = client.admin_get_user(
-            UserPoolId= poolId,
-            Username=username
-        )
-        if 'UserAttributes' not in result:
-            raise Exception("Can't find user in the system")
-        email = False
-        user['created'] = int(result['UserCreateDate'].timestamp())
-        user['modified'] = int(result['UserLastModifiedDate'].timestamp())
-        # find user email address
-        for attr in result['UserAttributes']:
-            if attr['Name'] != 'email':
-                continue # skip
-            email = attr['Value']
-
-        # Build data 
-        user['username'] = username
-        if email:
-            user['email'] = email
-
-    #set defaults 
-    user['approved'] = False
+    def updateUser(self):
+        if not self.userId:
+            raise Exception("User was not found")
+        user = user_model.get(self.userId)
+        if not user:
+            raise Exception("User was not found!!!")
+        
+        query= {
+            'userId': self.userId,
+            'username': self.payload['user']['username'],
+        }
+        
+        user = user_model.find(query)
+        if not user:
+            raise Exception("User was not found!!!")
+        
+        user.update(self.payload['user'])
+        
+        user= user_model.replace(user['id'],user)
+        if not user:
+            raise Exception("Failure to update")
+        
+        return user
     
-    return user_model.create(user)
+    def deleteUser(self):
+        if not self.userId:
+            raise Exception("User was not found")
 
-
-def updateUser(userId,data,username):
-    user = user_model.get(userId)
-    # unknown exception
-    if not user:
-        if not username:
-            raise Exception("Can't Find User!!!")
-        user = createUser(userId, username)
-
-    user.update(data)
-    
-    return user_model.replace(userId, user)
-
-
-
-def adminUpdateUser(userId,data,adminUsername):
-    pass
+        user= user_model.get(self.userId) 
+        if not user:
+            raise Exception("User was not found!!!")
+        
+        user = user_model.delete(self.payload.get("userId"))
+        
+        if not user:
+            return True
+        
+        return user
