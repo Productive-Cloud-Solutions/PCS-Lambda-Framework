@@ -8,6 +8,8 @@ class TestUserModel(BaseModel):
     def __init__(self) -> None:
 
         super().__init__("test-user-table")
+        
+        
 class TestUser():
     def __init__(self, user_model:BaseModel=None, **kwargs):
         self.__dict__.update(kwargs)
@@ -53,36 +55,6 @@ class TestUser():
     def __eq__(self, o) -> bool:
         return self.id == o.id
     
-class TestUserOld():
-
-    def __init__(self, userId:str=None, type:str=None, name:str=None, firstName:str = None, 
-                lastName:str=None, callback=None, gender:str=None, address:str=None, phone:str=None) -> None:
-        # check if parameneter is passed or use default  
-        self.id = userId if userId else str(uuid.uuid4())
-        self.firstName = firstName if firstName else str(uuid.uuid4())[:6]
-        self.lastName = lastName if lastName else str(uuid.uuid4())[:6]
-        self.name = name if name else self.firstName + ' ' + self.lastName
-        self.type = type if type else 'unspecified'
-        self.username = str(uuid.uuid4())[:6]
-        self.email = str(uuid.uuid4())[:6].strip("-")+"@gmail.com"
-        self.gender = gender if gender else str(uuid.uuid4())[:4]
-        self.address = address if address else {'city': 'Atlanta', 'county': None, 'line': 'Line', 'line2': None, 'state': 'GA', 'zip': None}
-        self.phone = phone if phone else str(uuid.uuid4())[:10]
-
-        # if not a function 
-        if callback and not callable(callback):
-            raise Exception("'callback' must be a function")
-        # call the function 
-        if callback:
-            callback(self)
-
-    @property
-    def dbUser(self):
-        return user_model.get(self.id)
-
-    def __eq__(self, o) -> bool:
-        return self.id == o.id
-
     
 class LambdaTester():
 
