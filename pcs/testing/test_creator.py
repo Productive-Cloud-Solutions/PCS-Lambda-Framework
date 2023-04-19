@@ -1,10 +1,59 @@
 import uuid
 import time
 import json
-from pcs.models.user import User
-user_model = User()
+from pcs.models.baseModel import BaseModel
 
+class TestUserModel(BaseModel):
+
+    def __init__(self) -> None:
+
+        super().__init__("test-user-table")
 class TestUser():
+    def __init__(self, user_model:BaseModel=None, **kwargs):
+        self.__dict__.update(kwargs)
+        # if hasattr(a, 'property'):
+        #     a.property
+        if user_model:
+            if not isinstance(user_model, BaseModel):
+                raise Exception("user_model must be instance of BaseModel")
+            self.user_model =  user_model
+        else:
+            self.user_model =  TestUserModel()
+        
+        # If user id is given but id is not explicitly set
+        if not hasattr(self, 'id'):
+            self.id = self.userId if hasattr(self, 'userId') else str(uuid.uuid4())
+        self.firstName = self.firstName if hasattr(self, 'firstName') else str(uuid.uuid4())[:6]
+        self.lastName = self.lastName if hasattr(self, 'lastName') else str(uuid.uuid4())[:6]
+        self.name = self.name if hasattr(self, 'name') else self.firstName + ' ' + self.lastName
+        self.type = self.type if hasattr(self, 'type') else "To be specified"
+        self.username = self.username if hasattr(self, 'username') else str(uuid.uuid4())[:6]
+        self.email = self.email if hasattr(self, 'email') else str(uuid.uuid4())[:6].strip("-")+"@gmail.com"
+        self.gender = self.gender if hasattr(self, 'gender') else str(uuid.uuid4())[:4]
+        self.address = self.address if hasattr(self, 'address') else {'city': 'Atlanta', 'county': None, 'line': 'Line', 'line2': None, 'state': 'GA', 'zip': None}
+        self.phone = self.phone if hasattr(self, 'phone') else str(uuid.uuid4())[:10]
+
+    def set_user_model(self, user_model:BaseModel):
+        if not isinstance(user_model, BaseModel):
+            raise Exception("user_model must be instance of BaseModel")
+        self.user_model=user_model
+        
+    @property
+    def dbUser(self): 
+        if not self.user_model:
+            raise Exception("Please set user_model")
+        return self.user_model.get(self.id)
+    
+    def createUser(self, user_model:BaseModel=None):
+        if not user_model:
+            return createUser(self.user_model, self)
+        else:
+            return createUser(user_model, self)
+
+    def __eq__(self, o) -> bool:
+        return self.id == o.id
+    
+class TestUserOld():
 
     def __init__(self, userId:str=None, type:str=None, name:str=None, firstName:str = None, 
                 lastName:str=None, callback=None, gender:str=None, address:str=None, phone:str=None) -> None:
@@ -110,7 +159,7 @@ def createEvent(action:str, payload:dict=None, user:TestUser = None, userId:str=
     return event
 
 
-def createUser(user:TestUser):
+def createUser(user_model:BaseModel, user:TestUser):
     # payload={
     # }
     userObj = {
@@ -137,3 +186,4 @@ def createUser(user:TestUser):
 
 def loadSample(file):
     return json.load(open("test/test_data/"+file))
+
