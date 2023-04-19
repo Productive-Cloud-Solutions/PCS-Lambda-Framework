@@ -16,10 +16,10 @@ from pcs.models.org import Organization, OrgFile
 class GeneralTest(unittest.TestCase):
 
     def setUp(self):
-        self.user = createUser(TestUser())
+        self.user = TestUser().createUser()
         self.org = Organization()
         self.id = str(uuid.uuid4())
-        # self.user2 = createUser(TestUser())
+        # self.user2 = TestUser().createUser()
 
     def tearDown(self) -> None:
         self.org.db.drop_collection(self.org.files.table)

@@ -23,10 +23,10 @@ class GeneralTest(unittest.TestCase):
         """
         Create a couple default users
         """
-        # self.user = createUser(TestUser())
-        # self.user2 = createUser(TestUser())
-        # self.doctor = createUser(TestUser())
-        # self.doctor2 = createUser(TestUser())
+        # self.user = TestUser().createUser()
+        # self.user2 = TestUser().createUser()
+        # self.doctor = TestUser().createUser()
+        # self.doctor2 = TestUser().createUser()
 
     """
     CRUD: C - Create

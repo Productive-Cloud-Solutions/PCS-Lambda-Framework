@@ -31,9 +31,9 @@ class GeneralTest(unittest.TestCase):
         self.temp_model = PermissionsModel(self.id+"-permissions")
 
         #Create users for testing permissions
-        self.user = createUser(TestUser(type="general"))
-        self.adminUser = createUser(TestUser(type="admin"))
-        self.managerUser = createUser(TestUser(type="manager"))
+        self.user = TestUser(type="general").createUser()
+        self.adminUser = TestUser(type="admin").createUser()
+        self.managerUser = TestUser(type="manager").createUser()
 
     
     def tearDown(self) -> None:

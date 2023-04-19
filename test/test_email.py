@@ -15,22 +15,21 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from Python_Requirements_Layer.python.fpdf import FPDF
 from datetime import datetime
-from pcs.models.user import User
 from unittest.mock import patch, MagicMock, Mock
 from pcs.util.mailer import sendEmail, sendEmailTemplate, sendEmailAttach, sendEmailAttachTemplate
 from pcs.testing.test_creator import TestUser, createEvent, createUser, LambdaTester
 
 
 tester = LambdaTester(app.lambda_handler)
-user_model = User()
+# user_model = User()
 
 
 class GeneralTest(unittest.TestCase):
 
     def setUp(self):
-        self.user = createUser(TestUser())
+        self.user = TestUser().createUser()
 
-        self.user2 = createUser(TestUser())
+        self.user2 = TestUser().createUser()
         self.fromEmail = "server@productivecloudsolutions.com"
         self.toEmail = "pcstestemailuser@productiveclouds.com"
         self.pdf = FPDF()
