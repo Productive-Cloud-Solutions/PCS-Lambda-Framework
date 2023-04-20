@@ -6,14 +6,13 @@ import boto3
 import unittest
 import time
 import random
-from Python_Requirements_Layer.python import jinja2
 import tempfile
 from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from Python_Requirements_Layer.python.fpdf import FPDF
+from fpdf import FPDF
 from datetime import datetime
 from unittest.mock import patch, MagicMock, Mock
 from pcs.util.mailer import sendEmail, sendEmailTemplate, sendEmailAttach, sendEmailAttachTemplate
