@@ -83,3 +83,5 @@ class GQLServerlessApp():
             elif args:
                 return fn(*args)
             return fn()
+        # If made it outside of forloop, nothing matched
+        raise Exception("Unmapped Action!") 

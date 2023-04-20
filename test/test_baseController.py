@@ -132,8 +132,9 @@ class GeneralTest(unittest.TestCase):
         self.assertEqual(self.userId, result, "Wrong result")
         
         #Test invalid mapping
-        result = self.gqlApp.run(self.id+"invalid", "getUserId")
-        self.assertEqual(None, result, "Wrong result")
+        with self.assertRaises(Exception) as error:
+            result = self.gqlApp.run(self.id+"invalid", "getUserId")
+        self.assertEqual("Unmapped Action!", error.exception.args[0], "Wrong id passed")
 
         #Test username get
         result = self.gqlApp.run(self.id, "getUsername")
