@@ -6,6 +6,8 @@ from pcs.controllers import baseController
 
 #TODO: Make backwards compatible with old controllers
 
+class UnmappedEventException(Exception):
+    pass
 class GQLServerlessApp():
     def __init__(self, userId=None, username=None, payload=None, source=None):
         self.userId = userId
@@ -84,4 +86,4 @@ class GQLServerlessApp():
                 return fn(*args)
             return fn()
         # If made it outside of forloop, nothing matched
-        raise Exception("Unmapped Action!") 
+        raise UnmappedEventException("Unmapped Action!") 

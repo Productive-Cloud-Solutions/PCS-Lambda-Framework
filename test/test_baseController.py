@@ -10,7 +10,7 @@ import random
 from datetime import datetime
 from unittest.mock import patch, MagicMock, Mock
 from pcs.controllers.baseController import BaseController
-from pcs.frameworks.appFrameworks import GQLServerlessApp
+from pcs.frameworks.appFrameworks import GQLServerlessApp, UnmappedEventException
 
 from pcs.testing.test_creator import TestUser, createEvent, LambdaTester, loadSample
 
@@ -135,7 +135,8 @@ class GeneralTest(unittest.TestCase):
         with self.assertRaises(Exception) as error:
             result = self.gqlApp.run(self.id+"invalid", "getUserId")
         self.assertEqual("Unmapped Action!", error.exception.args[0], "Wrong id passed")
-
+        self.assertIsInstance(error.exception, UnmappedEventException, "Wrong Exception Instance")
+        
         #Test username get
         result = self.gqlApp.run(self.id, "getUsername")
         self.assertEqual(self.username, result, "Wrong result")
