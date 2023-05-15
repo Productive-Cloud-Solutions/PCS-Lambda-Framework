@@ -30,43 +30,19 @@ def validate(fn):
 
 class MongoWrapper:
 
-    def __init__(self, table, host=None) -> None:
+    def __init__(self, host, table, pemFilePath=None, db_name='main-mongo-database') -> None:
         self.table = table
         self.collection_indexes = []
-        MAIN_DB = 'main-mongo-database'
-        host = os.environ.get('MONGO_DB_HOST')
-
-        if os.environ.get('AWS_SAM_LOCAL'):
-            client = MongoClient('local-db', 27017)
-            self.db = client[MAIN_DB]
-            # print('Local DB')
+        if pemFilePath:
+            client = MongoClient(host,
+                                    tls=True,
+                                    tlsCAFile=pemFilePath)
         else:
-            if os.environ.get('ENVIRONMENT') == 'production':
-                DBDATA = json.loads(secrets.get_secret(
-                    'ProdBDAppSecret', region_name="us-east-1"))
-                username = urllib.parse.quote_plus(DBDATA['username'])
-                password = urllib.parse.quote_plus(DBDATA['password'])
+            client = MongoClient(host, 27017)
 
-                HERE = os.path.dirname(os.path.abspath(__file__))
-                pemFilePath = os.path.join(HERE, 'rds-combined-ca-bundle.pem')
-                # conn = 'mongodb://%s:%s@%s/?tls=true&tlsCAFile=rds-combined-ca-bundle.pem&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false' % (username, password, DBDATA['host'])
-                conn = 'mongodb://%s:%s@%s/?replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false' % (
-                    username, password, DBDATA['host'])
-                client = MongoClient(conn,
-                                     tls=True,
-                                     tlsCAFile=pemFilePath)
-                self.db = client[MAIN_DB]
-            else:
-                client = MongoClient(host, 27017)
-                self.db = client[MAIN_DB]
+        self.db = client[db_name]
+        
 
-        # {
-        #     "index": {},
-        #     "options": {
-        #         "unique": True,
-        #     },
-
-        # }
     def updateIndexes(self):
         indexes = self.db[self.table].list_indexes()
         index_name_list = []
@@ -339,13 +315,13 @@ class MongoWrapper:
     
     # TODO: Create aggregate for permission based models
     """
-    base_key = column for BaseModel
+    base_key = column for MongoWrapper
     perm_key = column for PermissionsModel
     query
     perm_model = Used to get permissions
     """
 
-    def aggregate(self, query, model: "BaseModel", base_key, perm_key, convertIds=True):
+    def aggregate(self, query, model: "MongoWrapper", base_key, perm_key, convertIds=True):
 
         result = self.db[self.table].aggregate([
             {
@@ -414,135 +390,6 @@ class MongoWrapper:
                 self.db[self.table].drop_index(index)
 
         self.db[self.table].delete_one({'_id': '~~~~~~placeholder~~~~~'})
-
-# Retired as of 3/2/2023
-# class PermissionsBaseModel(MongoWrapper):
-
-#     def __init__(self, table, host = None) -> None:
-#         super().__init__(table=table, host=host)
-#         self.permissions_table_name = table+'_permissions'
-#         self.permissions = BaseModel(self.permissions_table_name, host=host)
-#         self.permissions.collection_indexes = [
-#             {
-#                 "index":{'objectId':1, "userId":1},
-#                 "options": {"unique":True}
-#             },
-#             {
-#                 "index":{'objectId':1},
-#                 "options":{"unique":False}
-#             },
-#             {
-#                 "index":{"userId":1},
-#                 "options":{"unique":False}
-#             }
-#         ]
-
-#     def updateIndexes(self):
-#         self.permissions.updateIndexes()
-#         return super().updateIndexes()
-
-#     def getAllPermissions(self,objectId):
-#         return self.permissions.findMany({'objectId':objectId})
-
-#     def getAllUserPermissions(self,userId):
-#         return self.permissions.findMany({'userId':userId})
-
-#     def getPermission(self, userId, objectId):
-#         return self.permissions.find({'objectId':objectId, 'userId':userId})
-
-#     def deletePermission(self, userId, objectId):
-#         perm = self.getPermission(userId, objectId)
-#         if perm:
-#             return self.permissions.delete(perm['id'])
-#         return False
-
-#     def setPermission(self, userId, objectId, data={}):
-#         perm = self.getPermission(userId, objectId)
-#         data['objectId'] = objectId
-#         data['userId'] = userId
-
-#         if 'type' not in data:
-#             data['type']=None
-
-#         if perm:
-#             perm.update(data)
-#             return self.permissions.replace(perm['id'],perm)
-
-#         return self.permissions.create(data)
-
-#     def getPermissionByType(self,objectId, type):
-#         return self.permissions.findMany({'objectId':objectId, 'type':type})
-
-#     # @property
-#     # def permissions(self)->BaseModel:
-#     #     return self.permissions
-
-
-class PermissionsModel(MongoWrapper):
-
-    def __init__(self, table, host=None) -> None:
-        # self.permissions_table_name = table+'_permissions'
-        super().__init__(table=table, host=host)
-        self.collection_indexes = [
-            {
-                "index": {'objectId': 1, "userId": 1},
-                "options": {"unique": True}
-            },
-            {
-                "index": {'objectId': 1},
-                "options": {"unique": False}
-            },
-            {
-                "index": {"userId": 1},
-                "options": {"unique": False}
-            }
-        ]
-
-    def updateIndexes(self):
-        return super().updateIndexes()
-
-    def getAllPermissions(self, objectId):
-        return self.findMany({'objectId': objectId})
-
-    def getAllUserPermissions(self, userId):
-        return self.findMany({'userId': userId})
-
-    def getPermission(self, userId, objectId):
-        return self.find({'objectId': objectId, 'userId': userId})
-
-    def deletePermission(self, userId, objectId):
-        perm = self.getPermission(userId, objectId)
-        if perm:
-            return self.delete(perm['id'])
-        return False
-
-    def setPermission(self, userId, objectId, data={}):
-        perm = self.getPermission(userId, objectId)
-        data['objectId'] = objectId
-        data['userId'] = userId
-
-        if 'type' not in data:
-            data['type'] = None
-
-        if perm:
-            perm.update(data)
-            return self.replace(perm['id'], perm)
-
-        return self.create(data)
-
-    def getPermissionByType(self, objectId, type):
-        return self.findMany({'objectId': objectId, 'type': type})
-
-    # @property
-    # def permissions(self)->BaseModel:
-    #     return self.permissions
-
-
-class BaseModel(MongoWrapper):
-
-    def __init__(self, table, host=None) -> None:
-        super().__init__(table=table, host=host)
-        pass
 
 
 if __name__ == "__main__":

@@ -383,15 +383,3 @@ class GeneralTest(unittest.TestCase):
         #                             _id=False, modifiedTimeStamp=False, payload= payload)
         # self.assertIn('The code is not valid',
         #               error.exception.args[0], 'Wrong Error received')
-
-    """
-    Ignore this for now.
-    """
-    @patch('util.appFileManager.create_presigned_url')
-    def test_with_patch(self, patch_s3_generate_url):
-        pass
-
-        # stubbing s3 mocked service function for testing
-        # patch_s3_generate_url.return_value = 'https://s3.amazonaws.com/app-bucket/test/obj.jpg'
-
-

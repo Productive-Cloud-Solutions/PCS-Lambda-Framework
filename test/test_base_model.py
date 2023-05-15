@@ -11,10 +11,13 @@ from unittest.mock import patch, MagicMock, Mock
 
 from pcs.testing.test_creator import TestUser, createEvent, createUser, LambdaTester
 
-from pcs.models.baseModel import BaseModel
+from pcs.models.mongoWrapper import MongoWrapper
 
 #Get, delete, replace, 
-
+class BaseModel(MongoWrapper):
+    def __init__(self, table) -> None:        
+        super().__init__(host="local-db", table=table)
+        
 class GeneralTest(unittest.TestCase):
 
     def setUp(self):
@@ -663,12 +666,3 @@ class GeneralTest(unittest.TestCase):
     # def test_errors(self):
     #     pass
        
-
-    # @patch('util.appFileManager.create_presigned_url')
-    # def test_with_patch(self, patch_s3_generate_url):
-    #     pass
-
-    #     # # stubbing s3 mocked service function for testing
-    #     # patch_s3_generate_url.return_value = 'https://s3.amazonaws.com/app-bucket/test/obj.jpg'
-
-
