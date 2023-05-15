@@ -14,7 +14,7 @@ from pymongo import MongoClient
 
 from pcs.testing.test_creator import TestUser, createEvent, createUser, LambdaTester
 
-from pcs.models.baseModel import BaseModel, PermissionsModel
+from pcs.models.mongoWrapper import MongoWrapper, PermissionsModel
 
 class GeneralTest(unittest.TestCase):
 

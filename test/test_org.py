@@ -12,7 +12,7 @@ from unittest.mock import patch, MagicMock, Mock
 from pcs.testing.test_creator import TestUser, createEvent, createUser, LambdaTester
 
 from pcs.models.org import Organization, OrgFile
-
+#Take this out the framework
 class GeneralTest(unittest.TestCase):
 
     def setUp(self):

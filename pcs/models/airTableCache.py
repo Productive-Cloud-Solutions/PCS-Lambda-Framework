@@ -1,8 +1,9 @@
-from pcs.models.baseModel import BaseModel
+from pcs.models.mongoWrapper import MongoWrapper
 import time
 
+#Take this out completely and put in base code
 
-class AirTableCache(BaseModel):
+class AirTableCache(MongoWrapper):
 
     def __init__(self) -> None:
 

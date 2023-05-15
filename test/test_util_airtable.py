@@ -20,7 +20,7 @@ cache_model = AirTableCache()
 tester = LambdaTester(app.lambda_handler)
 
 
-
+#Take this out from the framework
 class GeneralTest(unittest.TestCase):
 
     def setUp(self):

@@ -1,10 +1,11 @@
-from pcs.models.baseModel import BaseModel, PermissionsModel
+from pcs.models.mongoWrapper import MongoWrapper, PermissionsModel
 
+#Take this out of the framework
 class OrgPermissions(PermissionsModel):
     def __init__(self)-> None:
         super().__init__("org-table")
     
-class OrgFile(BaseModel):
+class OrgFile(MongoWrapper):
     def __init__(self)-> None:
         self.permissions = OrgFilePermissions()
         super().__init__("org-file-table")
@@ -15,7 +16,7 @@ class OrgFilePermissions(PermissionsModel):
 
 
 #Associate files with objects or by themselves
-class Organization(BaseModel):
+class Organization(MongoWrapper):
     def __init__(self) -> None:
         self.permissions = OrgPermissions() #Associate with OrgPermissions
         self.files = OrgFile() #Associate with OrgFile

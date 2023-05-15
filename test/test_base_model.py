@@ -11,10 +11,13 @@ from unittest.mock import patch, MagicMock, Mock
 
 from pcs.testing.test_creator import TestUser, createEvent, createUser, LambdaTester
 
-from pcs.models.baseModel import BaseModel
+from pcs.models.mongoWrapper import MongoWrapper
 
 #Get, delete, replace, 
-
+class BaseModel(MongoWrapper):
+    def __init__(self, table) -> None:        
+        super().__init__(host="local-db", table=table)
+        
 class GeneralTest(unittest.TestCase):
 
     def setUp(self):

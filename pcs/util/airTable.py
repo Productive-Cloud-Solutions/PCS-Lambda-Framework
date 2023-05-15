@@ -7,6 +7,8 @@ import hashlib
 
 airTableCache_model = AirTableCache()
 
+#take this out the framework
+
 API_LIMIT = 1.0 / 5  # 5 per second
 
 

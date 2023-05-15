@@ -1,9 +1,9 @@
 import uuid
 import time
 import json
-from pcs.models.baseModel import BaseModel
+from pcs.models.mongoWrapper import MongoWrapper
 
-class TestUserModel(BaseModel):
+class TestUserModel(MongoWrapper):
 
     def __init__(self) -> None:
 
@@ -11,13 +11,13 @@ class TestUserModel(BaseModel):
         
         
 class TestUser():
-    def __init__(self, user_model:BaseModel=None, **kwargs):
+    def __init__(self, user_model:MongoWrapper=None, **kwargs):
         self.__dict__.update(kwargs)
         # if hasattr(a, 'property'):
         #     a.property
         if user_model:
-            if not isinstance(user_model, BaseModel):
-                raise Exception("user_model must be instance of BaseModel")
+            if not isinstance(user_model, MongoWrapper):
+                raise Exception("user_model must be instance of MongoWrapper")
             self.user_model =  user_model
         else:
             self.user_model =  TestUserModel()
@@ -35,9 +35,9 @@ class TestUser():
         self.address = self.address if hasattr(self, 'address') else {'city': 'Atlanta', 'county': None, 'line': 'Line', 'line2': None, 'state': 'GA', 'zip': None}
         self.phone = self.phone if hasattr(self, 'phone') else str(uuid.uuid4())[:10]
 
-    def set_user_model(self, user_model:BaseModel):
-        if not isinstance(user_model, BaseModel):
-            raise Exception("user_model must be instance of BaseModel")
+    def set_user_model(self, user_model:MongoWrapper):
+        if not isinstance(user_model, MongoWrapper):
+            raise Exception("user_model must be instance of MongoWrapper")
         self.user_model=user_model
         
     @property
@@ -46,7 +46,7 @@ class TestUser():
             raise Exception("Please set user_model")
         return self.user_model.get(self.id)
     
-    def createUser(self, user_model:BaseModel=None):
+    def createUser(self, user_model:MongoWrapper=None):
         if not user_model:
             return createUser(self.user_model, self)
         else:
@@ -131,7 +131,7 @@ def createEvent(action:str, payload:dict=None, user:TestUser = None, userId:str=
     return event
 
 
-def createUser(user_model:BaseModel, user:TestUser):
+def createUser(user_model:MongoWrapper, user:TestUser):
     # payload={
     # }
     userObj = {
