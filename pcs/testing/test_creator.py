@@ -7,8 +7,7 @@ class TestUserModel(MongoWrapper):
 
     def __init__(self) -> None:
 
-        super().__init__("test-user-table")
-        
+        super().__init__(host="local-db", table="test-user-table")
         
 class TestUser():
     def __init__(self, user_model:MongoWrapper=None, **kwargs):

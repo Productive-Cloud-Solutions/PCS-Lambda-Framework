@@ -666,12 +666,3 @@ class GeneralTest(unittest.TestCase):
     # def test_errors(self):
     #     pass
        
-
-    # @patch('util.appFileManager.create_presigned_url')
-    # def test_with_patch(self, patch_s3_generate_url):
-    #     pass
-
-    #     # # stubbing s3 mocked service function for testing
-    #     # patch_s3_generate_url.return_value = 'https://s3.amazonaws.com/app-bucket/test/obj.jpg'
-
-
