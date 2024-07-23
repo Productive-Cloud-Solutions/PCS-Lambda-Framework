@@ -94,10 +94,10 @@ def createEvent(action:str, payload:dict=None, user:TestUser = None, userId:str=
         "fieldName":event['action'],
     }
 
-    # uid = str(uuid.uuid4())
-    # # Default user ID
-    # event["identity"]["sub"] = uid
-    # event["identity"]["claims"]["sub"] = uid
+    uid = str(uuid.uuid4())
+    # Default user ID
+    event["identity"]["sub"] = uid
+    event["identity"]["claims"]["sub"] = uid
 
     # if use user ID in event 
     if userId:
