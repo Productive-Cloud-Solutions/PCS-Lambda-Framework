@@ -96,7 +96,7 @@ def createEvent(action:str, payload:dict=None, user:TestUser = None, userId:str=
 
     uid = str(uuid.uuid4())
     # Default user ID
-    event["identity"]["sub"] = uid
+    event["identity"]["sub"] = None
     event["identity"]["claims"]["sub"] = uid
 
     # if use user ID in event 
