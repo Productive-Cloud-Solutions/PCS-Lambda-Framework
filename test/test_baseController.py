@@ -32,6 +32,9 @@ class DummyController(BaseController):
     def hello(self):
         return "Hello"
     
+    def getInput(self):
+        return self.inputData
+    
     def getKwargsArgs(self, *args, **kwargs):
         argsList = []
         for a in args:
@@ -227,7 +230,7 @@ class GeneralTest(unittest.TestCase):
         #Test source get
         result = self.gqlApp.run(self.id, "getSource")
         self.assertEqual(self.source, result, "Wrong result")
-    
+        
     def test_instance_action_map(self):
         self.instance = DummyController(userId=self.userId, username=self.username, payload=self.payload, source=self.source)
         #These go to the None parentType
@@ -295,3 +298,32 @@ class GeneralTest(unittest.TestCase):
         
         result = self.gqlApp.run(self.id+"args", "getArgs")
         self.assertEqual(self.args, result, "Args was not returned")
+        
+    def test_input_data(self):
+        # Payload of nothing
+        payload= {}
+        
+        self.instance = DummyController(userId=self.userId, username=self.username, payload=payload, source=self.source)
+        self.gqlApp.linkGraphQL(self.instance, self.id, "hello", "hello")
+        result = self.gqlApp.run(self.id, "getInput")
+        self.assertEqual(payload, {}, 'name was not correct')
+        
+        # Payload with empty inputData
+        payload= {}
+        payload['inputData']= {}
+        
+        self.instance = DummyController(userId=self.userId, username=self.username, payload=payload, source=self.source)
+        self.gqlApp.linkGraphQL(self.instance, self.id+'0', "hello", "hello")
+        result = self.gqlApp.run(self.id+'0', "getInput")
+        self.assertEqual(payload['inputData'], {}, 'name was not correct')
+        
+        # Payload with inputData
+        payload= {}
+        payload['inputData']= {}
+        payload['inputData']['name']= 'Record Name'
+        
+        self.instance = DummyController(userId=self.userId, username=self.username, payload=payload, source=self.source)
+        self.gqlApp.linkGraphQL(self.instance, self.id+'1', "hello", "hello")
+        result = self.gqlApp.run(self.id+'1', "getInput")
+        self.assertEqual(payload['inputData'], result, 'name was not correct')
+        

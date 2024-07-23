@@ -4,6 +4,7 @@ class BaseController():
         self.username = username
         self.payload = payload
         self.source = source
+        self.inputData = payload.get('inputData') if isinstance(payload, dict) else None
         self.user = self.userInit()
 
     def userInit(self):

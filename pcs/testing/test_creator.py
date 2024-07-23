@@ -113,6 +113,7 @@ def createEvent(action:str, payload:dict=None, user:TestUser = None, userId:str=
         event["identity"]["claims"]["sub"] = user.id
 
     # add payload to event 
+    event['payload'] = {}
     if payload:
         # if createdtTimeStamp is true or has a value 
         if createdtTimeStamp:
